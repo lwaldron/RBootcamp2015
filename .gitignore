@@ -8,6 +8,18 @@
 # RStudio files
 .Rproj.user/
 
+# cache
+notes/*cache*/*
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+
+#vim files
+*~
+*.swp
+
+*.pdf
+*.html
+*.txt
+*.log
