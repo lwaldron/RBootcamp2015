@@ -31,3 +31,32 @@ R is great at small!
 
 Principles of Tidy Data
 ==============================================
+* Often said: 80% of data analysis is cleaning/munging
+* Provide a standard way of organizing data\footnote{\tiny{http://vita.had.co.nz/papers/tidy-data.pdf}}
+1. Each variable forms a column
+2. Each observation forms a row
+3. Each type of observational unit forms a table
+
+Dataset     | Variable    | Variable
+----------- | ----------- | -----------
+Observation | Value       | Value
+Observation | Value       | Value
+
+
+Principles of Tidy Data (2)
+==============================================
+
+
+```{r, echo = TRUE}
+library(nycflights13)
+library(dplyr)
+flights %>% group_by(carrier) %>% 
+  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE)) %>% 
+  merge(., airlines) %>% arrange(avg_depdelay)
+```
+
+```{r , echo = TRUE}
+longdata <- gather(iris, key = measure, n, Sepal.Length:Petal.Width) %>% 
+  separate(measure, c("type", "dimension"))
+longdata %>% group_by(Species, type, dimension) %>% summarise(avg_dim = mean(n, na.rm = TRUE))
+```
