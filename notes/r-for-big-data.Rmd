@@ -13,6 +13,8 @@ Using R for Big Data
 ==============================================
 * Big Data 
 * Tidy Data
+* Tips for learning R
+* Reading large datasets
 * Handling large datasets
 * Efficiency in data manipulation
 * Pipes for fluid and readable programming
@@ -45,17 +47,95 @@ Observation | Value       | Value
 
 Principles of Tidy Data (2)
 ==============================================
+* Why is tidy data important? 
+* Easier for the analyst and the computer to extract knowledge from a set of values
+* Saves a *lot* of time
 
+Useful tips for learning R via Documentation 
+==============================================
+Pseudo code                                   |   Example code
+--------------------------------------------  |   -------------------
+install.packages(packagename)                 | library(dplyr) 
+?functionname                                 | ?select
+?package::functionname                        | ?dplyr::select
+? 'Reserved keyword or symbol' \color{red}{backticks!} | ? '%>%'
+??searchforpossiblyexistingfunctionandortopic | ??simulate
+help(package = "loadedpackage")               | help("dplyr")
+browseVignettes("packagename")                | browseVignettes("dplyr")
 
-```{r, echo = TRUE}
-library(nycflights13)
-library(dplyr)
-flights %>% group_by(carrier) %>% 
-  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE)) %>% 
-  merge(., airlines) %>% arrange(avg_depdelay)
+Learning R via online courses
+==============================================
+* [Coursera](https://www.coursera.org)
+* [edX](https://www.edX.org)
+* [RStudio](https://www.rstudio.com/resources/training/online-learning/#R)
+* [Quick-R](http://www.statmethods.net/) -
+Mostly for basic and base functions
+
+Reading and Loading Datasets into Memory
+==============================================
+* Requires installation of devtools (dependent on OS)
+```{r, eval = FALSE, echo = TRUE}
+devtools::install_github("username/repository")
+devtools::install_github("hadley/readr")
+devtools::install_github("hadley/haven")
 ```
 
-```{r , echo = TRUE}
+Pipes for fluid and readable programming
+==============================================
+* Create an example of messy data: 
+
+```{r, echo = TRUE, message = FALSE}
+library(dplyr); library(tidyr)
+data("mtcars")
+mtcars <- select(mtcars, c(mpg:hp, wt, vs:carb))
+mtcars <- mutate(mtcars,
+                 cylgear = paste(cyl, gear, sep = "."))
+separate(mtcars, cylgear, c("cyl0", "gear0"))[1:3,]
+```
+
+mtcars <- mtcars[,c(1:4, 5, 7:11)]
+
+Mutate & Transumte
+==============================================
+```{r, echo = TRUE, message = FALSE}
+head(mutate(mtcars, displ_l = disp/61.0237))
+head(transmute(mtcars, disp_l = disp/61.0237),2)
+```
+
+Base Version
+==============================================
+Same operation using base functions: 
+
+```{r, eval = TRUE}
+data("mtcars")
+mtcars <- mtcars[,c("mpg", "cyl", "disp", "hp",
+                    "wt", "vs", "am", "gear", "carb")]
+mtcars$cylgear <- with(mtcars, paste(cyl, gear, sep = "."))
+mtcars[, c("cyl1", "gear1")] <- NA
+mtcars[, c("cyl1", "gear1")] <-
+  strsplit(mtcars$cylgear, ".", fixed = TRUE) %>%
+  sapply(FUN = "[", c(1,2)) %>% t 
+head(mtcars, 3)
+```
+
+Considerations
+==============================================
+
+\huge{Be careful of loss of information!}
+
+
+Piping Example
+==============================================
+```{r, echo = TRUE, message = FALSE}
+library(nycflights13)
+flights %>% group_by(carrier) %>% 
+  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE)) %>% 
+  merge(., airlines) %>% arrange(avg_depdelay) %>% head
+```
+
+Separate
+==============================================
+```{r , echo = TRUE, message = FALSE}
 longdata <- gather(iris, key = measure, n, Sepal.Length:Petal.Width) %>% 
   separate(measure, c("type", "dimension"))
 longdata %>% group_by(Species, type, dimension) %>% summarise(avg_dim = mean(n, na.rm = TRUE))
