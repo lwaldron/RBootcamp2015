@@ -56,7 +56,13 @@ Principles of Tidy Data (2)
 * Easier for the analyst and the computer to extract knowledge from a set of values
 * Saves a *lot* of time
 
-Useful tips for learning R via Documentation 
+Tips for learning R (general)
+==============================================
+* Learning R may become frustrating at times
+* Learning a language
+* Practice is key
+
+Useful tips for learning R (stand-alone)
 ==============================================
 Pseudo code                                   |   Example code
 --------------------------------------------  |   -------------------
