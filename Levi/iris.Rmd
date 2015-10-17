@@ -1,5 +1,5 @@
 ---
-title: "Iris plotting example"
+title: "R Bootcamp session 2: the Irises"
 output: 
   html_document: 
     number_sections: yes
