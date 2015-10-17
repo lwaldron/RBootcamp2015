@@ -1,7 +1,3 @@
----
-title: "R Bootcamp session 2: the Irises"
----
-
 # Libraries used
 
 
