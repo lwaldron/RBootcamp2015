@@ -1,5 +1,5 @@
 ---
-title: "Iris plotting example"
+title: "R Bootcamp session 2: the Irises"
 output: 
   html_document: 
     number_sections: yes
@@ -272,19 +272,16 @@ methods(class=class(fit))
 ```
 
 ```
-##  [1] add1           alias          all            anova         
-##  [5] attrassign     augment        case.names     coerce        
-##  [9] confint        cooks.distance deviance       dfbeta        
-## [13] dfbetas        drop1          dummy.coef     effects       
-## [17] esticon        extractAIC     family         formula       
-## [21] fortify        glance         hatvalues      influence     
-## [25] initialize     kappa          labels         linest        
-## [29] logLik         model.frame    model.matrix   nobs          
-## [33] nullBasis      plot           predict        print         
-## [37] proj           qr             residuals      rstandard     
-## [41] rstudent       show           simulate       slotsFromS3   
-## [45] summary        tidy           variable.names vcov          
-## [49] xtable        
+##  [1] add1           alias          anova          case.names    
+##  [5] coerce         confint        cooks.distance deviance      
+##  [9] dfbeta         dfbetas        drop1          dummy.coef    
+## [13] effects        extractAIC     family         formula       
+## [17] hatvalues      influence      initialize     kappa         
+## [21] labels         logLik         model.frame    model.matrix  
+## [25] nobs           plot           predict        print         
+## [29] proj           qr             residuals      rstandard     
+## [33] rstudent       show           simulate       slotsFromS3   
+## [37] summary        variable.names vcov          
 ## see '?methods' for accessing help and source code
 ```
 
@@ -330,13 +327,18 @@ The "broom" package can be useful for extracting key results:
 
 ```r
 library(broom)
+```
+
+```
+## Error in library(broom): there is no package called 'broom'
+```
+
+```r
 tidy(fit)
 ```
 
 ```
-##           term   estimate   std.error statistic      p.value
-## 1  (Intercept) -0.3630755 0.039761990 -9.131221 4.699798e-16
-## 2 Petal.Length  0.4157554 0.009582436 43.387237 4.675004e-86
+## Error in eval(expr, envir, enclos): could not find function "tidy"
 ```
 
 ## Diagnostic plots
@@ -499,8 +501,8 @@ library(xtable)
 print(xtable(fit3), type="html")
 ```
 
-<!-- html table generated in R 3.2.2 by xtable 1.7-4 package -->
-<!-- Fri Oct 16 21:03:48 2015 -->
+<!-- html table generated in R 3.3.0 by xtable 1.7-4 package -->
+<!-- Sat Oct 17 09:53:49 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Estimate </th> <th> Std. Error </th> <th> t value </th> <th> Pr(&gt;|t|) </th>  </tr>
   <tr> <td align="right"> (Intercept) </td> <td align="right"> -0.4731 </td> <td align="right"> 0.1766 </td> <td align="right"> -2.68 </td> <td align="right"> 0.0082 </td> </tr>
@@ -515,8 +517,8 @@ print(xtable(fit3), type="html")
 print(xtable(anova(fit3)), type="html")
 ```
 
-<!-- html table generated in R 3.2.2 by xtable 1.7-4 package -->
-<!-- Fri Oct 16 21:03:48 2015 -->
+<!-- html table generated in R 3.3.0 by xtable 1.7-4 package -->
+<!-- Sat Oct 17 09:53:49 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Df </th> <th> Sum Sq </th> <th> Mean Sq </th> <th> F value </th> <th> Pr(&gt;F) </th>  </tr>
   <tr> <td> Petal.Length </td> <td align="right"> 1 </td> <td align="right"> 80.26 </td> <td align="right"> 80.26 </td> <td align="right"> 2891.11 </td> <td align="right"> 0.0000 </td> </tr>
