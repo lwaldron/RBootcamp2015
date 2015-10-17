@@ -6,6 +6,13 @@ output:
     toc: yes
 ---
 
+# Libraries used
+
+
+```r
+install.packages(c("broom", "xtable", "gee", "RColorBrewer", "gplots"))
+```
+
 # Exploring the Iris dataset
 
 ## Basic introduction to the dataset:
@@ -78,7 +85,7 @@ Default plot for a numeric variable:
 plot(iris$Sepal.Length)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 For two numeric variables:
 
@@ -86,7 +93,7 @@ For two numeric variables:
 plot(iris$Sepal.Length, iris$Sepal.Width)
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 Equivalently using the formula interface:
 
@@ -113,13 +120,13 @@ Do again, using different shapes (pch) or colors (col) for each species.  Add a 
 plot(1:20, pch=1:20)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
 
 ```r
 plot(1:20, pch=c(".", "a", "dog"))
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-2.png) 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-2.png) 
 
 ## Color palettes.
 Several package provide color palettes:
@@ -129,7 +136,7 @@ library(RColorBrewer)
 display.brewer.all(n=3)
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 
 ```r
 brewer.pal(3, "Set2")
@@ -145,7 +152,7 @@ You can also create your own:
 plot(1:10, col=colorRampPalette(c("red", "lightgrey", "black"))(10), pch=15, cex=3)
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
 
 **Exercise** try creating and using some different color palettes
 
@@ -157,7 +164,7 @@ legend(x=6.5, y=4.5, legend=levels(iris$Species),
        col=brewer.pal(3, "Set2"), pch=1)
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 **Note:** how did I know to do x$mids, x$counts?
 
@@ -166,7 +173,7 @@ x <- hist(iris$Sepal.Length)
 segments(x0=x$mids-0.25, x1=x$mids+0.25, y0=x$counts, y1=x$counts, lw=4, col="red")
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 How about a boxplot with histogram together? (see http://rgraphgallery.blogspot.com/search/label/boxplot)
 
@@ -178,7 +185,7 @@ hist(iris$Sepal.Length,xlim=c(4,8), col = "pink", freq = FALSE)
 lines(density(iris$Sepal.Length))
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
 
 Boxplot of Sepal width vs. species
 
@@ -186,7 +193,7 @@ Boxplot of Sepal width vs. species
 boxplot(Sepal.Width ~ Species, data=iris, boxwex=0.25, col="grey")
 ```
 
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
 
 ```Use dev.off() to clear layout.```
 
@@ -198,7 +205,7 @@ heatmap.2(t(iris[, 1:4]), trace="none", scale="row",
           ColSideColors=c("grey", "black", "yellow")[iris$Species])
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
 
 See https://bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html for more advanced and interactive heatmaps.
 
@@ -208,7 +215,7 @@ Exploratory pairs plots:
 pairs(iris)
 ```
 
-![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
+![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png) 
 
 ## Final notes on plotting
 
@@ -229,7 +236,7 @@ plot(Petal.Width ~ Petal.Length, col=c("black", "red", "blue")[Species], pch=(15
 legend("topleft", legend=levels(iris$Species), col=c("black", "red", "blue"), pch=15:17)
 ```
 
-![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png) 
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png) 
 
 
 ## Exercise #2: GSE12945
@@ -265,18 +272,19 @@ methods(class=class(fit))
 ```
 
 ```
-##  [1] add1           alias          anova          attrassign    
-##  [5] augment        case.names     coerce         confint       
-##  [9] cooks.distance deviance       dfbeta         dfbetas       
-## [13] drop1          dummy.coef     effects        esticon       
-## [17] extractAIC     family         formula        fortify       
-## [21] glance         hatvalues      influence      initialize    
-## [25] kappa          labels         linest         logLik        
-## [29] model.frame    model.matrix   nobs           nullBasis     
-## [33] plot           predict        print          proj          
-## [37] qr             residuals      rstandard      rstudent      
-## [41] show           simulate       slotsFromS3    summary       
-## [45] tidy           variable.names vcov          
+##  [1] add1           alias          all            anova         
+##  [5] attrassign     augment        case.names     coerce        
+##  [9] confint        cooks.distance deviance       dfbeta        
+## [13] dfbetas        drop1          dummy.coef     effects       
+## [17] esticon        extractAIC     family         formula       
+## [21] fortify        glance         hatvalues      influence     
+## [25] initialize     kappa          labels         linest        
+## [29] logLik         model.frame    model.matrix   nobs          
+## [33] nullBasis      plot           predict        print         
+## [37] proj           qr             residuals      rstandard     
+## [41] rstudent       show           simulate       slotsFromS3   
+## [45] summary        tidy           variable.names vcov          
+## [49] xtable        
 ## see '?methods' for accessing help and source code
 ```
 
@@ -318,16 +326,29 @@ anova(fit) # anova table
 influence(fit) # regression diagnostics
 ```
 
-## Diagnostic plots:
+The "broom" package can be useful for extracting key results:
+
+```r
+library(broom)
+tidy(fit)
+```
+
+```
+##           term   estimate   std.error statistic      p.value
+## 1  (Intercept) -0.3630755 0.039761990 -9.131221 4.699798e-16
+## 2 Petal.Length  0.4157554 0.009582436 43.387237 4.675004e-86
+```
+
+## Diagnostic plots
 
 ```r
 par(mfrow=c(2,2))
 plot(fit)
 ```
 
-![plot of chunk unnamed-chunk-19](figure/unnamed-chunk-19-1.png) 
+![plot of chunk unnamed-chunk-21](figure/unnamed-chunk-21-1.png) 
 
-## Multiple regression:
+## Multiple regression
 
 ```r
 fit2 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width, data=iris)
@@ -374,7 +395,7 @@ anova(fit, fit2)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-## Interaction terms:
+## Interaction terms
 
 ```r
 fit2int <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width + Petal.Length:Sepal.Length, data=iris)
@@ -479,7 +500,7 @@ print(xtable(fit3), type="html")
 ```
 
 <!-- html table generated in R 3.2.2 by xtable 1.7-4 package -->
-<!-- Fri Oct 16 20:57:10 2015 -->
+<!-- Fri Oct 16 21:03:48 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Estimate </th> <th> Std. Error </th> <th> t value </th> <th> Pr(&gt;|t|) </th>  </tr>
   <tr> <td align="right"> (Intercept) </td> <td align="right"> -0.4731 </td> <td align="right"> 0.1766 </td> <td align="right"> -2.68 </td> <td align="right"> 0.0082 </td> </tr>
@@ -495,7 +516,7 @@ print(xtable(anova(fit3)), type="html")
 ```
 
 <!-- html table generated in R 3.2.2 by xtable 1.7-4 package -->
-<!-- Fri Oct 16 20:57:10 2015 -->
+<!-- Fri Oct 16 21:03:48 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Df </th> <th> Sum Sq </th> <th> Mean Sq </th> <th> F value </th> <th> Pr(&gt;F) </th>  </tr>
   <tr> <td> Petal.Length </td> <td align="right"> 1 </td> <td align="right"> 80.26 </td> <td align="right"> 80.26 </td> <td align="right"> 2891.11 </td> <td align="right"> 0.0000 </td> </tr>
@@ -521,7 +542,7 @@ fit4 <- glm(virginica ~ Petal.Width + Petal.Length + Sepal.Length + Sepal.Width,
 plot(fit4)
 ```
 
-![plot of chunk unnamed-chunk-25](figure/unnamed-chunk-25-1.png) ![plot of chunk unnamed-chunk-25](figure/unnamed-chunk-25-2.png) ![plot of chunk unnamed-chunk-25](figure/unnamed-chunk-25-3.png) ![plot of chunk unnamed-chunk-25](figure/unnamed-chunk-25-4.png) 
+![plot of chunk unnamed-chunk-27](figure/unnamed-chunk-27-1.png) ![plot of chunk unnamed-chunk-27](figure/unnamed-chunk-27-2.png) ![plot of chunk unnamed-chunk-27](figure/unnamed-chunk-27-3.png) ![plot of chunk unnamed-chunk-27](figure/unnamed-chunk-27-4.png) 
 
 ## Poisson regression
 
@@ -532,7 +553,7 @@ fit5 <- glm(round(Petal.Width) ~ Petal.Length + Sepal.Length + Sepal.Width, data
 plot(fit5)
 ```
 
-![plot of chunk unnamed-chunk-26](figure/unnamed-chunk-26-1.png) ![plot of chunk unnamed-chunk-26](figure/unnamed-chunk-26-2.png) ![plot of chunk unnamed-chunk-26](figure/unnamed-chunk-26-3.png) ![plot of chunk unnamed-chunk-26](figure/unnamed-chunk-26-4.png) 
+![plot of chunk unnamed-chunk-28](figure/unnamed-chunk-28-1.png) ![plot of chunk unnamed-chunk-28](figure/unnamed-chunk-28-2.png) ![plot of chunk unnamed-chunk-28](figure/unnamed-chunk-28-3.png) ![plot of chunk unnamed-chunk-28](figure/unnamed-chunk-28-4.png) 
 
 ```r
 summary(fit5)
@@ -591,7 +612,7 @@ lines(pred.interval[, "upr"] ~ newx[, 1], lty=3)
 legend("topleft", legend=c(levels(iris$Species), "CI", "PI"), col=c("black", "red", "blue", "black", "black"), pch=c(15:17, -1, -1), lty=c(-1, -1, -1, 2, 3))
 ```
 
-![plot of chunk unnamed-chunk-28](figure/unnamed-chunk-28-1.png) 
+![plot of chunk unnamed-chunk-30](figure/unnamed-chunk-30-1.png) 
 
 ## Exercise #2
 Regression on the GSE12945 dataset.  Is there an association between WIPF1 and any of the other variables?  Note: this exercise is meant to do interactively with the class, otherwise the code will look too advanced for beginners.
@@ -678,6 +699,6 @@ t(all.p)
 hist(all.p)
 ```
 
-![plot of chunk unnamed-chunk-32](figure/unnamed-chunk-32-1.png) 
+![plot of chunk unnamed-chunk-34](figure/unnamed-chunk-34-1.png) 
 
 It doesn't look like it!

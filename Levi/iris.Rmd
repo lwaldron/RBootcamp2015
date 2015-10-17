@@ -6,6 +6,12 @@ output:
     toc: yes
 ---
 
+# Libraries used
+
+```{r, eval=FALSE}
+install.packages(c("broom", "xtable", "gee", "RColorBrewer", "gplots"))
+```
+
 # Exploring the Iris dataset
 
 ## Basic introduction to the dataset:
@@ -165,20 +171,26 @@ anova(fit) # anova table
 influence(fit) # regression diagnostics
 ```
 
-## Diagnostic plots:
+The "broom" package can be useful for extracting key results:
+```{r}
+library(broom)
+tidy(fit)
+```
+
+## Diagnostic plots
 ```{r}
 par(mfrow=c(2,2))
 plot(fit)
 ```
 
-## Multiple regression:
+## Multiple regression
 ```{r}
 fit2 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width, data=iris)
 summary(fit2) # show results
 anova(fit, fit2)
 ```
 
-## Interaction terms:
+## Interaction terms
 ```{r}
 fit2int <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width + Petal.Length:Sepal.Length, data=iris)
 anova(fit2, fit2int)
