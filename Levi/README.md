@@ -1,9 +1,5 @@
 ---
 title: "R Bootcamp session 2: the Irises"
-output: 
-  html_document: 
-    number_sections: yes
-    toc: yes
 ---
 
 # Libraries used
