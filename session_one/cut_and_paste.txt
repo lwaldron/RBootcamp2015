@@ -1,0 +1,422 @@
+#Warning for Precision
+#========================================================
+
+sqrt(4) * sqrt(4) == 4
+sqrt(2) * sqrt(2) == 2
+all.equal( sqrt(2) * sqrt(2), 2)
+
+#Storing Data / Making Variables
+#========================================================
+
+x <- 5
+x
+x * 2
+
+#Storing Data / Making Variables
+#========================================================
+
+x <- 2
+x <- x + 1
+x
+
+#Storing Data / Making Variables
+#========================================================
+
+x <- 2
+x <- x + 1
+y <- 4
+x * y
+
+#Group Similar Data with Vectors
+#========================================================
+
+c(1,2,3,4,5,6,7)
+5:9
+9:1
+
+#Character Vectors
+#========================================================
+
+c( "a", "a", "a", "a", "a" )
+rep( "a", 5 )
+c( "Cats","are","amazing" )
+
+#Logical Vectors
+#========================================================
+
+c( TRUE, FALSE, TRUE, TRUE, FALSE )
+
+#Factor Vector
+#========================================================
+
+factor( c( "Cats","are","still", "amazing" ) )
+
+#Vectors Must Be of One Data Mode
+#========================================================
+
+c( 1, "2", FALSE)
+c( 1, FALSE )
+
+#Combining Vectors
+#========================================================
+
+x <- 1:4
+y <- 5:10
+c( x, y )
+c( 1:4, 5:10 )
+
+#Selecting Vector Elements
+#========================================================
+
+x <- 1:4
+x[ 2 ]
+
+x <- 1:10
+x[ 4:7 ]
+
+#Selecting Vector Elements
+#========================================================
+
+x <- c( "a", "b", "c", "d", "e", "f" )
+x[ c(5,3,1) ]
+
+x <- 5:1
+x[ -1 ]
+
+#Selecting Vector Elements
+#========================================================
+
+# Start with vector from 1 - 10
+x <- 1:10
+# Get indices of even elements
+y <- x%%2 == 0
+# Pull out those even element by index
+x[y]
+
+#2-Dimensional Vectors are Matrices
+#========================================================
+
+matrix( 1:20, nrow = 5, ncol = 4 )
+
+#Indexing Matrices
+#========================================================
+
+boring.matrix <- matrix( 1:20, nrow = 5, ncol = 4 )
+dim( boring.matrix )
+boring.matrix[ ,1 ]
+boring.matrix[ 2, ]
+
+#Indexing Matrices
+#========================================================
+
+boring.matrix
+boring.matrix[ 2, 1 ]
+
+#Updating Data in Matrices
+#========================================================
+
+boring.matrix[ 2, 1 ] <- 99 
+boring.matrix
+
+#Matrix Operations
+#========================================================
+
+boring.matrix <- matrix(1:9, nrow = 3)
+boring.matrix
+t(boring.matrix)
+
+#Matrix Operations
+#========================================================
+
+boring.matrix
+boring.matrix + 1
+
+#Matrix Operations
+#========================================================
+
+boring.matrix
+boring.matrix + boring.matrix
+
+#Matrix Operations
+#========================================================
+
+boring.matrix
+boring.matrix * 2
+
+#Matrix Operations
+#========================================================
+
+boring.matrix
+boring.matrix * boring.matrix
+
+#Matrix Operations
+#========================================================
+
+boring.matrix
+boring.matrix %*% boring.matrix
+
+#Naming Matrices
+#========================================================
+
+colnames( boring.matrix ) <- c( "c1","c2","c3" )
+rownames( boring.matrix ) <- c( "r1", "r2", "r3" )
+boring.matrix
+boring.matrix["r1",]
+
+#Data Frames: Matrices of Many Data Types
+#========================================================
+
+x <- 11:16
+y <- seq(0,1,.2)
+z <- c( "one", "two", "three", "four", "five", "six" )
+a <- factor( z )
+
+#Data Frames: Matrices of Many Data Types
+#========================================================
+
+data.frame(x,y,z,a)
+
+test.dataframe <- data.frame(x,y,z,a)
+
+#Data Frames are Column Major
+#========================================================
+
+test.dataframe
+class( test.dataframe[3] )
+
+#Data Frames Hold Different Data Modes
+#========================================================
+
+class( test.dataframe[[1]] )
+class( test.dataframe[[2]] )
+class( test.dataframe[[3]] )
+
+#Warning!
+#========================================================
+
+LETTERS
+class( LETTERS )
+data.mode.df <- data.frame( LETTERS )
+class( data.mode.df[[ 1 ]] )
+
+#Combining Data Frames
+#========================================================
+
+mini.frame.one <- data.frame( "one" = 1:4 )
+mini.frame.two <- data.frame( "two" = 6:9 )
+
+#Combining Data Frames
+#========================================================
+
+cbind( mini.frame.one, mini.frame.two )
+
+#Updating Data Frames
+#========================================================
+
+test.dataframe
+
+#Updating Data Frames
+#========================================================
+
+test.dataframe[[1]] = 21:26
+test.dataframe
+
+#Updating Data Frames
+#========================================================
+
+test.dataframe[[3,1]] = 111
+test.dataframe
+
+#Lists are Filing Cabinets
+#========================================================
+
+measurements <- c( 1.3, 1.6, 3.2, 9.8, 10.2 )
+self.reporting <- c( 13, 6, 4, 7, 6, 5, 8, 9, 7, 4 )
+children <- FALSE
+parents <- c( "Parent1.name", "Parent2.name" )
+
+#Lists are Filing Cabinets
+#========================================================
+
+my.person <- list( measurements, self.reporting, children, parents )
+my.person
+
+#Lists are Filing Cabinets
+#========================================================
+
+my.person[4]
+my.person[1:2]
+
+#Lists are Filing Cabinets
+#========================================================
+
+my.person[[1]]
+
+#Lists are Filing Cabinets
+#========================================================
+
+my.person <- list( measure = measurements, self.measure = self.reporting, child = children, parents = parents )
+my.person
+
+#Lists are Filing Cabinets
+#========================================================
+
+my.person$parents
+
+#Control Structures
+#========================================================
+
+x = 1
+if( x < 5){
+  print( "Mew." )
+}
+
+#Control Structures
+#========================================================
+
+x = 10
+if( x < 3 ){
+  print( "Less than three!")
+} else {
+  print( "Greater than or equal to three!")
+}
+
+#Control Structures
+#========================================================
+
+x = 3
+if( x < 3 ){
+  print( "Less than three!" )
+} else if( x > 3 ) {
+  print( "Greater than three!")
+} else {
+  print( "Equal to three." )
+}
+
+#Control Structures
+#========================================================
+
+measurements <- 1:10
+for( value in measurements ){
+  print( value * 10 )
+}
+
+#Control Structures
+#========================================================
+
+print( measurements * 10 )
+
+#Control Structures
+#========================================================
+
+measures = rlnorm(1000)
+centrality = "Mean"
+#centrality = "Median"
+#centrality = "Mew"
+switch( centrality,
+  Mean = mean( measures ),
+  Median = median( measures ),
+  stop("Dave, I don't understand.")
+)
+
+#Control Structures
+#========================================================
+
+measures = 1:10
+ifelse( measures < 5, 0, 1)
+
+#Control Structures the R Way
+#========================================================
+
+boring.matrix
+
+colSums( boring.matrix )
+min( boring.matrix )
+max( boring.matrix )
+
+#Control Structures the R Way
+#========================================================
+
+x = 11:20
+x < 14
+x[ x < 14 ]
+
+#Control Structures the R Way
+#========================================================
+
+x
+which( x < 14 )
+
+#Imputing NAs ... Like a Boss
+#========================================================
+
+x = 1:10
+x[ c(1,3,5,7) ] <- NA
+x
+x[ x == NA ] <- mean( x, na.rm = TRUE )
+
+#Control Structures the R Way
+#========================================================
+
+colSums( boring.matrix )
+apply( boring.matrix, 2, sum )
+
+#Control Structures the R Way
+#========================================================
+
+rowSums( boring.matrix )
+apply( boring.matrix, 1, sum )
+
+#Reusing Code with Functions
+#========================================================
+
+arithmetic.means <- function( values.to.measure ){
+  measure.mean = sum( values.to.measure ) / length( values.to.measure )
+  return( measure.mean )
+}
+
+measurements <- 1:10
+arithmetic.means( measurements )
+
+mean( measurements )
+
+#Make Your First Function
+#========================================================
+
+critical.cat <- function( number ){
+  # Making functions like a boss
+  if( number %% 2 == 0 ){
+    print( "Mew" )
+  } else {
+    print( "Eww")
+  }
+  return( number - 1 )
+}
+
+#Reading Tables
+#========================================================
+
+new.df = read.table( "data/super_fun.txt" )
+dim( new.df )
+
+head( new.df )
+new.df
+
+#Reading Tables
+#========================================================
+
+new.df = read.table( "data/not_so_fun.txt" )
+dim( new.df )
+head( new.df )
+
+#Writing Tables
+#========================================================
+
+write.table( boring.matrix, "data/boring_matrix.txt")
+write.csv( test.dataframe, "data/test_dataframe.csv", quote=FALSE)
+
+#Importing Excel
+#========================================================
+
+library(xlsx)
+read.xlsx( "data/super_fun.xlsx", 1 )
