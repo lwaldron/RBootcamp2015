@@ -19,7 +19,8 @@ vignettes/*.pdf
 *~
 *.swp
 
-*.pdf
 *.html
 *.txt
 *.log
+
+*.tex
