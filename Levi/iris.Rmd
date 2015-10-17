@@ -1,0 +1,295 @@
+---
+title: "Iris plotting example"
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+---
+
+# Libraries used
+
+```{r, eval=FALSE}
+install.packages(c("broom", "xtable", "gee", "RColorBrewer", "gplots"))
+```
+
+# Exploring the Iris dataset
+
+## Basic introduction to the dataset:
+```{r}
+data(iris)
+dim(iris)
+class(iris)
+summary(iris)
+head(iris)
+sapply(iris, class)
+```
+
+## Plotting
+Default plot for a numeric variable:
+```{r}
+plot(iris$Sepal.Length)
+```
+
+For two numeric variables:
+```{r}
+plot(iris$Sepal.Length, iris$Sepal.Width)
+```
+
+Equivalently using the formula interface:
+```{r, eval=FALSE}
+plot(iris$Sepal.Width ~ iris$Sepal.Length)
+```
+
+Or:
+```{r, eval=FALSE}
+pdf("iris1.pdf")
+plot(Sepal.Width ~ Sepal.Length, data=iris)
+dev.off()
+```
+
+## Details in plotting
+
+Make it look a better. Look at ?plot and ?plot.default.  Play with type, ylim, log, main, sub, xlab, ylab, pch, cex.  Explore different output devices, and RStudio "Export."
+
+Do again, using different shapes (pch) or colors (col) for each species.  Add a legend.
+
+```{r}
+plot(1:20, pch=1:20)
+plot(1:20, pch=c(".", "a", "dog"))
+```
+
+## Color palettes.
+Several package provide color palettes:
+```{r}
+library(RColorBrewer)
+display.brewer.all(n=3)
+brewer.pal(3, "Set2")
+```
+
+You can also create your own:
+```{r}
+plot(1:10, col=colorRampPalette(c("red", "lightgrey", "black"))(10), pch=15, cex=3)
+```
+
+**Exercise** try creating and using some different color palettes
+
+```{r}
+plot(Sepal.Width ~ Sepal.Length, data=iris, 
+     col=brewer.pal(3, "Set2")[iris$Species])
+legend(x=6.5, y=4.5, legend=levels(iris$Species), 
+       col=brewer.pal(3, "Set2"), pch=1)
+```
+
+**Note:** how did I know to do x$mids, x$counts?
+```{r}
+x <- hist(iris$Sepal.Length)
+segments(x0=x$mids-0.25, x1=x$mids+0.25, y0=x$counts, y1=x$counts, lw=4, col="red")
+```
+
+How about a boxplot with histogram together? (see http://rgraphgallery.blogspot.com/search/label/boxplot)
+```{r}
+layout(mat = matrix(c(1,2), 2, 1, byrow=TRUE),  height = c(1,3))
+par(mar=c(2, 2, 0.5, 1))
+boxplot(iris$Sepal.Length, horizontal=TRUE,  outline=TRUE,ylim=c(4,8), frame=FALSE, col = "green1")
+hist(iris$Sepal.Length,xlim=c(4,8), col = "pink", freq = FALSE)
+lines(density(iris$Sepal.Length))
+```
+
+Boxplot of Sepal width vs. species
+```{r}
+boxplot(Sepal.Width ~ Species, data=iris, boxwex=0.25, col="grey")
+```
+
+```Use dev.off() to clear layout.```
+
+```{r, fig.scap="Heatmap of iris dimensions.", message=FALSE, warning=FALSE}
+library(gplots)
+heatmap.2(t(iris[, 1:4]), trace="none", scale="row", 
+          key=TRUE, mar=c(2, 8), cexRow=1, 
+          ColSideColors=c("grey", "black", "yellow")[iris$Species])
+```
+
+See https://bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html for more advanced and interactive heatmaps.
+
+Exploratory pairs plots:
+```{r}
+pairs(iris)
+```
+
+## Final notes on plotting
+
+* The ggplot2 package provides nicer-looking plots by default
+* There is a lot to learn: https://mramos.shinyapps.io/obView
+
+# Plotting and exploratory data analysis exercises
+
+Datasets are available at http://goo.gl/x87GY6
+
+## Exercise #1: Iris dataset
+
+Plot petal width vs. petal length for the iris dataset, identifying species using _both_ color and datapoint type.
+```{r}
+data(iris)
+plot(Petal.Width ~ Petal.Length, col=c("black", "red", "blue")[Species], pch=(15:17)[Species], data=iris)
+legend("topleft", legend=levels(iris$Species), col=c("black", "red", "blue"), pch=15:17)
+```
+
+
+## Exercise #2: GSE12945
+
+Do exploratory analysis of the GSE12945 dataset, taken from the following paper:
+
+> Staub E, Groene J, Heinze M, Mennerich D et al. An expression module of WIPF1-coexpressed genes identifies patients with favorable prognosis in three tumor types. J Mol Med (Berl) 2009 Jun;87(6):633-44. PMID: 19399471
+
+Dataset is available from http://goo.gl/x87GY6 or by using the following command: 
+```{r}
+if(!file.exists("GSE12945.csv"))
+  download.file("https://www.dropbox.com/sh/pukanjaahmonmcp/AADWX-vKk70CuGgYWBqqxWjfa/datasets/GSE12945.csv", destfile="GSE12945.csv", method="wget")
+gse <- read.csv("GSE12945.csv")
+```
+
+# Regression
+
+## Simple Linear Regression Example:
+```{r}
+data(iris)
+fit <- lm(Petal.Width ~ Petal.Length, data=iris)
+class(fit)
+methods(class=class(fit))
+summary(fit) # show results
+```
+
+## Other useful functions 
+```{r, results='hide'}
+coefficients(fit) # model coefficients
+predict(fit) # fitted predictions
+predict(fit, newdata=data.frame(Petal.Length=seq(1, 2, by=0.1)))
+confint(fit, level=0.95) # CIs for model parameters 
+fitted(fit) # predicted values
+residuals(fit) # residuals
+anova(fit) # anova table 
+influence(fit) # regression diagnostics
+```
+
+The "broom" package can be useful for extracting key results:
+```{r}
+library(broom)
+tidy(fit)
+```
+
+## Diagnostic plots
+```{r}
+par(mfrow=c(2,2))
+plot(fit)
+```
+
+## Multiple regression
+```{r}
+fit2 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width, data=iris)
+summary(fit2) # show results
+anova(fit, fit2)
+```
+
+## Interaction terms
+```{r}
+fit2int <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width + Petal.Length:Sepal.Length, data=iris)
+anova(fit2, fit2int)
+```
+
+## Model matrices
+```{r}
+tail(model.matrix(~ Species, data=iris))
+tail(iris)
+```
+
+## Analysis of covariance
+```{r}
+fit3 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width + Species, data=iris)
+summary(fit3)
+anova(fit2, fit3)
+```
+
+Make nice tables - see http://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf.
+
+```{r, results='asis'}
+library(xtable)
+print(xtable(fit3), type="html")
+print(xtable(anova(fit3)), type="html")
+```
+
+## Logistic regression
+```{r}
+iris2 <- iris
+iris2$virginica <- iris$Species == "virginica"
+fit4 <- glm(virginica ~ Petal.Width + Petal.Length + Sepal.Length + Sepal.Width, data=iris2, family=binomial)
+plot(fit4)
+```
+
+## Poisson regression
+
+(obviously a bad choice here):
+```{r}
+fit5 <- glm(round(Petal.Width) ~ Petal.Length + Sepal.Length + Sepal.Width, data=iris2, family=poisson)
+plot(fit5)
+summary(fit5)
+```
+
+## Generalized Estimating Equations
+```{r, eval=FALSE}
+library(gee)
+gee(formula, id, data, ...)
+```
+
+# Regression exercises
+## Exercise #1
+Plotting a linear regression with confidence and prediction intervals.
+
+```{r}
+plot(Petal.Width ~ Petal.Length, col=c("black", "red", "blue")[Species], pch=(15:17)[Species], xlab="Petal Length (cm)", ylab="Petal Width (cm)", data=iris)
+newx <- data.frame(Petal.Length=seq(min(iris$Petal.Length), max(iris$Petal.Length), length.out=100))
+conf.interval <- predict(fit, newdata=newx, interval="confidence")
+pred.interval <- predict(fit, newdata=newx, interval="prediction")
+lines(conf.interval[, "fit"] ~ newx[, 1], lty=1, lw=3)
+lines(conf.interval[, "lwr"] ~ newx[, 1], lty=2)
+lines(conf.interval[, "upr"] ~ newx[, 1], lty=2)
+lines(pred.interval[, "lwr"] ~ newx[, 1], lty=3)
+lines(pred.interval[, "upr"] ~ newx[, 1], lty=3)
+legend("topleft", legend=c(levels(iris$Species), "CI", "PI"), col=c("black", "red", "blue", "black", "black"), pch=c(15:17, -1, -1), lty=c(-1, -1, -1, 2, 3))
+```
+
+## Exercise #2
+Regression on the GSE12945 dataset.  Is there an association between WIPF1 and any of the other variables?  Note: this exercise is meant to do interactively with the class, otherwise the code will look too advanced for beginners.
+
+```{r}
+download.file("https://www.dropbox.com/sh/pukanjaahmonmcp/AADWX-vKk70CuGgYWBqqxWjfa/datasets/GSE12945.csv", destfile="GSE12945.csv", method="wget")
+gse <- read.csv("GSE12945.csv", row.names=1)  #note that row.names is needed in this case to make the first column row names.
+sapply(gse, class) #make sure classes are appropriate
+```
+
+G, T, N, M should be ordered factors:
+```{r}
+gse$G <- factor(gse$G, ordered=TRUE)
+gse$T <- factor(gse$T, ordered=TRUE)
+gse$N <- factor(gse$N, ordered=TRUE)
+gse$M <- factor(gse$M, ordered=TRUE)
+```
+
+This is one way to select all columns except for WIPF1:
+```{r}
+(vars.to.test <- colnames(gse)[!colnames(gse) %in% "WIPF1"])
+```
+
+```{r}
+all.lm <- lapply(vars.to.test, function(x){
+  lm(as.formula(paste("WIPF1 ~", x)), data=gse)
+})
+names(all.lm) <- vars.to.test
+all.p <- sapply(all.lm, function(mylm){
+  fstat <- summary(mylm)$fstatistic
+  1-pf(fstat[1], fstat[2], fstat[3])
+})
+t(all.p)
+hist(all.p)
+```
+
+It doesn't look like it!

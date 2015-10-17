@@ -1,0 +1,261 @@
+---
+title: "Making the most of R"
+author: "Marcel Ramos"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  beamer_presentation:
+    theme: "CambridgeUS"
+    colortheme: "dolphin"
+    fonttheme: "structureitalicserif"
+---
+
+Using R for Big Data
+==============================================
+* Big Data 
+* Tidy Data
+* Tips for learning R
+* Reading data into memory
+* Cleaning and Manipulating data with `tidyr` and `dplyr`
+* Pipes for fluid and readable programming
+
+Big Data\footnote{\tiny{Slide adapted from Hadley Wickham}}
+==============================================
+Size   | Description
+------ | -------
+Big    | Can't fit in memory on one computer: >5 TB
+Medium | Fits in memory on a server: 10 GB - 5 TB
+Small  | Fits in memory on a laptop: <10 GB
+
+\begin{block}{Note:}
+R is great at small!
+\end{block}
+
+Big Data (2)
+==============================================
+* Reducible problems (subsetting, sampling, summarizing)
+* Big data is often messy data and not much else
+* Price to pay for big data
+
+Principles of Tidy Data
+==============================================
+* Often said: 80% of data analysis is cleaning/munging
+* Provide a standard way of organizing data\footnote{\tiny{http://vita.had.co.nz/papers/tidy-data.pdf}}
+1. Each variable forms a column
+2. Each observation forms a row
+3. Each type of observational unit forms a table
+
+Dataset     | Variable    | Variable
+----------- | ----------- | -----------
+Observation | Value       | Value
+Observation | Value       | Value
+
+
+Principles of Tidy Data (2)
+==============================================
+* Why is tidy data important? 
+* Easier for the analyst and the computer to extract knowledge from a set of values
+* Saves a *lot* of time
+
+Useful tips for learning R via Documentation 
+==============================================
+Pseudo code                                   |   Example code
+--------------------------------------------  |   -------------------
+install.packages(packagename)                 | library(dplyr) 
+?functionname                                 | ?select
+?package::functionname                        | ?dplyr::select
+? 'Reserved keyword or symbol' \color{blue}{(or backticks)} | ? '%>%'
+??searchforpossiblyexistingfunctionandortopic | ??simulate
+help(package = "loadedpackage")               | help("dplyr")
+browseVignettes("packagename")                | browseVignettes("dplyr")
+
+Learning R via online courses
+==============================================
+* [Coursera](https://www.coursera.org)
+* [edX](https://www.edX.org)
+* [RStudio](https://www.rstudio.com/resources/training/online-learning/#R)
+* [Quick-R](http://www.statmethods.net/) -
+Mostly for basic and base functions
+* [RStudio Cheatcheets](https://www.rstudio.com/resources/cheatsheets/)
+
+Reading and Loading Datasets into Memory
+==============================================
+* Requires installation of `devtools` package and Rtools (varies by OS)
+```{r, eval = FALSE, echo = TRUE}
+devtools::install_github("username/repository")
+devtools::install_github("hadley/readr")
+devtools::install_github("hadley/haven")
+```
+
+Read Time
+==============================================
+```{r, eval = FALSE, echo = TRUE}
+file.info("data/BRFSS2013_Data.csv")$size/(1024^2)
+system.time(read.csv("data/BRFSS2013_Data.csv"))
+
+library(readr)
+system.time(read_csv("data/BRFSS2013_Data.csv"))
+```
+
+58.8 MB File
+
+Function         | Elapsed Time
+---------------- | ------------
+utils::read.csv  | 5.115
+readr::read_csv  | 1.836
+
+Read Time (2)
+==============================================
+
+* You may also consider the `fread` function
+* data.table syntax is different
+
+```{r, eval = FALSE, echo = TRUE}
+library(data.table)
+?fread
+```
+
+Data Munging using `tidyr`
+==============================================
+* `tidyr` faciliates reshaping of data
+1. spread vs. gather \color{purple}{*most likely to use}\color{black}
+2. extract/separate vs. unite
+3. nest vs. unnest
+
+Data Manipulation using `dplyr`
+==============================================
+* `dplyr` convention aims to ease cognitive burden
+* Function names are easy to remember
+1. select (Y)
+2. mutate/transmute (add Ys / new Y)
+3. filter (get Xs based on condition)
+4. slice (get Xs specified)
+5. summarise (reduce to single observation) 
+6. arrange (re-order observations)
+
+Examples of use
+==============================================
+* Create an example of messy data: 
+
+```{r, echo = TRUE, message = FALSE}
+library(dplyr); library(tidyr)
+data("mtcars")
+mtcars <- select(mtcars, c(mpg:hp, wt, vs:carb))
+mtcars <- unite(mtcars, cylgear, cyl, gear)
+separate(mtcars, cylgear, c("cyl0", "gear0"))[1:3,]
+```
+
+mtcars <- select(mtcars, c(1:4, 5, 7:11))
+
+Mutate & Transumte
+==============================================
+```{r, echo = TRUE, message = FALSE}
+head(mutate(mtcars, displ_l = disp/61.0237))
+head(transmute(mtcars, disp_l = disp/61.0237),2)
+```
+
+Example with base functions
+==============================================
+```{r, eval = TRUE, echo = TRUE}
+data("mtcars")
+mtcars <- mtcars[,c("mpg", "cyl", "disp", "hp",
+                    "wt", "vs", "am", "gear", "carb")]
+mtcars$cylgear <- with(mtcars, paste(cyl, gear, sep = "."))
+mtcars[, c("cyl1", "gear1")] <- NA
+mtcars[, c("cyl1", "gear1")] <-
+  t(sapply(strsplit(mtcars$cylgear, ".", fixed = TRUE), FUN = "[", c(1,2)))
+head(mtcars, 3)
+```
+
+Considerations
+==============================================
+
+\huge{Be careful of loss of information!}
+
+Functional programming example
+==============================================
+```{r, eval = FALSE, echo = TRUE}
+hourly_delay <- filter(
+  summarise(
+    group_by(
+      filter(
+        flights,
+        !is.na(dep_delay)
+      ),
+      date, hour
+    ), 
+    delay = mean(dep_delay),
+    n = n()
+  ), 
+  n > 10
+)
+```
+
+Pipes for fluid and readable programming
+==============================================
+* Piping operator: %>%
+* Consider the previous example with pipes:
+
+```{r, echo = TRUE, eval = FALSE}
+hourly_delay <- flights %>% 
+  filter(!is.na(dep_delay)) %>%
+  group_by(date, hour) %>%
+  summarise(delay = mean(dep_delay), n = n()) %>%
+  filter(n > 10)
+```
+
+More piping
+==============================================
+```{r, echo = TRUE, message = FALSE}
+library(nycflights13)
+flights %>% group_by(carrier) %>% 
+  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE), count = n()) %>% 
+  merge(., airlines) %>% arrange(avg_depdelay) %>% head
+```
+
+Using `separate`
+==============================================
+```{r , echo = TRUE, message = FALSE}
+data(iris)
+longdata <- gather(iris, key = measure, n, Sepal.Length:Petal.Width) %>% 
+  separate(measure, c("type", "dimension"))
+longdata %>% group_by(Species, type, dimension) %>% summarise(avg_dim = mean(n, na.rm = TRUE))
+```
+
+Piping with `tidyr`
+==============================================
+```{r, echo = TRUE}
+library(readr)
+(pew <- read_csv("../data/pew.csv"))
+```
+
+Using `gather`
+==============================================
+
+```{r, echo = TRUE}
+pew %>% gather(income, n, -religion) %>% head
+```
+
+income, religion : variables to gather 
+n : variable in cells 
+-religion means all except religion
+
+Using `group_by`
+==============================================
+```{r, echo = TRUE}
+pew %>% gather(income, n, -religion) %>% group_by(income) %>% summarise(totals = sum(n))
+```
+
+Using `group_by` (2)
+==============================================
+```{r, echo = TRUE}
+pew %>% gather(income, n, -religion) %>% group_by(religion) %>% summarise(totals = sum(n))
+```
+
+Summary
+==============================================
+* Big data not always the best option
+* Tidy data makes everything easier and saves time
+* Learning R can be a bit frustrating but certainly not impossible
+* R is great for small types of datasets that fit into memory but can also be used in HPC
+* Writing R code should not be a cognitive burden on the user 
+* R programming should be readable and fun to use!
