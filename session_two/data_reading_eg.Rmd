@@ -1,0 +1,49 @@
+---
+title: "Data reading example"
+author: "Levi Waldron"
+date: "October 17, 2015"
+output: html_document
+---
+
+This example we did at the end of the day shows three different ways to load in a csv file.  You can get this file at http://goo.gl/x87GY6 .
+
+# Traditional
+
+First, let's read the file the traditional way:
+
+```{r}
+chs = read.csv("chs2012_codedforR.csv")
+```
+
+Summarize it:
+
+```{r}
+summary(chs)
+```
+
+# data.table
+
+```{r}
+library(data.table)
+chs2 = fread("chs2012_codedforR.csv", data.table=FALSE)
+```
+
+Summarize again:
+
+```{r}
+summary(chs2)
+class(chs2)
+```
+
+# readr
+
+```{r}
+library(readr)
+chs3 = read_csv("chs2012_codedforR.csv")
+```
+
+Summarize:
+```{r}
+summary(chs3)
+class(chs3)
+```
