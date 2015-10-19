@@ -49,7 +49,7 @@ dev.off()
 
 ## Details in plotting
 
-Make it look a better. Look at ?plot and ?plot.default.  Play with type, ylim, log, main, sub, xlab, ylab, pch, cex.  Explore different output devices, and RStudio "Export."
+Make it look a better. Look at ?plot, ?plot.default, and ?par.  Play with type, ylim, log, main, sub, xlab, ylab, pch, cex.  Explore different output devices, and RStudio "Export."
 
 Do again, using different shapes (pch) or colors (col) for each species.  Add a legend.
 
@@ -122,8 +122,6 @@ pairs(iris)
 * There is a lot to learn: https://mramos.shinyapps.io/obView
 
 # Plotting and exploratory data analysis exercises
-
-Datasets are available at http://goo.gl/x87GY6
 
 ## Exercise #1: Iris dataset
 
