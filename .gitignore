@@ -9,7 +9,7 @@
 .Rproj.user/
 
 # cache
-notes/*cache*/*
+session_three/notes/*cache*/*
 
 # produced vignettes
 vignettes/*.html
