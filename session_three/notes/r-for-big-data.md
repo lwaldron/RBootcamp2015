@@ -1,7 +1,7 @@
 ---
 title: "Making the most of R"
 author: "Marcel Ramos"
-date: "October 18, 2015"
+date: "October 19, 2015"
 output: 
   beamer_presentation:
     theme: "CambridgeUS"
@@ -141,24 +141,68 @@ Data Manipulation using `dplyr`
 5. summarise (reduce to single observation) 
 6. arrange (re-order observations)
 
+The `tbl_df` class and show method
+==============================================
+* Data frame print is messy
+* `tbl_df` provides same functionality (i.e. data.frame methods work)
+* Output is neat and descriptive
+* See: `?tbl_df`
+
+
+```r
+library(dplyr)
+tbl_df(mtcars)
+```
+
+```
+## Source: local data frame [32 x 12]
+## 
+##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##    (dbl) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl)
+## 1   21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4
+## 2   21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4
+## 3   22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1
+## 4   21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1
+## 5   18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2
+## 6   18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1
+## 7   14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4
+## 8   24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2
+## 9   22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2
+## 10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4
+## ..   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...
+## Variables not shown: models (chr)
+```
+
 Examples of use
 ==============================================
 * Create an example of messy data: 
 
 
 ```r
-library(dplyr); library(tidyr)
+library(tidyr)
 data("mtcars")
+mtcars <- tbl_df(mtcars)
 mtcars <- select(mtcars, c(mpg:hp, wt, vs:carb))
 mtcars <- unite(mtcars, cylgear, cyl, gear)
-separate(mtcars, cylgear, c("cyl0", "gear0"))[1:3,]
+separate(mtcars, cylgear, c("cyl0", "gear0"))
 ```
 
 ```
-##                mpg cyl0 gear0 disp  hp    wt vs am carb
-## Mazda RX4     21.0    6     4  160 110 2.620  0  1    4
-## Mazda RX4 Wag 21.0    6     4  160 110 2.875  0  1    4
-## Datsun 710    22.8    4     4  108  93 2.320  1  1    1
+## Source: local data frame [32 x 9]
+## 
+##      mpg  cyl0 gear0  disp    hp    wt    vs    am  carb
+##    (dbl) (chr) (chr) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl)
+## 1   21.0     6     4 160.0   110 2.620     0     1     4
+## 2   21.0     6     4 160.0   110 2.875     0     1     4
+## 3   22.8     4     4 108.0    93 2.320     1     1     1
+## 4   21.4     6     3 258.0   110 3.215     1     0     1
+## 5   18.7     8     3 360.0   175 3.440     0     0     2
+## 6   18.1     6     3 225.0   105 3.460     1     0     1
+## 7   14.3     8     3 360.0   245 3.570     0     0     4
+## 8   24.4     4     4 146.7    62 3.190     1     0     2
+## 9   22.8     4     4 140.8    95 3.150     1     0     2
+## 10  19.2     6     4 167.6   123 3.440     1     0     4
+## ..   ...   ...   ...   ...   ...   ...   ...   ...   ...
 ```
 
 mtcars <- select(mtcars, c(1:4, 5, 7:11))
@@ -167,17 +211,16 @@ Mutate & Transumte
 ==============================================
 
 ```r
-head(mutate(mtcars, displ_l = disp/61.0237))
+head(mutate(mtcars, displ_l = disp/61.0237), 2)
 ```
 
 ```
-##    mpg cylgear disp  hp    wt vs am carb  displ_l
-## 1 21.0     6_4  160 110 2.620  0  1    4 2.621932
-## 2 21.0     6_4  160 110 2.875  0  1    4 2.621932
-## 3 22.8     4_4  108  93 2.320  1  1    1 1.769804
-## 4 21.4     6_3  258 110 3.215  1  0    1 4.227866
-## 5 18.7     8_3  360 175 3.440  0  0    2 5.899347
-## 6 18.1     6_3  225 105 3.460  1  0    1 3.687092
+## Source: local data frame [2 x 9]
+## 
+##     mpg cylgear  disp    hp    wt    vs    am  carb  displ_l
+##   (dbl)   (chr) (dbl) (dbl) (dbl) (dbl) (dbl) (dbl)    (dbl)
+## 1    21     6_4   160   110 2.620     0     1     4 2.621932
+## 2    21     6_4   160   110 2.875     0     1     4 2.621932
 ```
 
 ```r
@@ -185,7 +228,10 @@ head(transmute(mtcars, disp_l = disp/61.0237),2)
 ```
 
 ```
+## Source: local data frame [2 x 1]
+## 
 ##     disp_l
+##      (dbl)
 ## 1 2.621932
 ## 2 2.621932
 ```
@@ -213,8 +259,18 @@ head(mtcars, 3)
 
 Considerations
 ==============================================
+**Be careful of loss of information!**
 
-\huge{Be careful of loss of information!}
+* Row names were lost when converting to `table_df`
+* Solution: add rownames as variable
+
+
+```r
+data(mtcars)
+carrows <- rownames(mtcars)
+mtcars <- tbl_df(mtcars)
+mtcars <- mutate(mtcars, models = carrows)
+```
 
 Functional programming example
 ==============================================
@@ -256,13 +312,9 @@ More piping
 ```r
 library(nycflights13)
 flights %>% group_by(carrier) %>% 
-  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE), count = n()) %>% 
-  left_join(airlines) %>% arrange(avg_depdelay) %>% head
-```
-
-```
-## Warning in left_join_impl(x, y, by$x, by$y): joining factor and character
-## vector, coercing into character vector
+  summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE),
+            count = n()) %>% left_join(airlines) %>% 
+    arrange(avg_depdelay) %>% head
 ```
 
 ```
@@ -283,9 +335,11 @@ Using `separate`
 
 ```r
 data(iris)
-longdata <- gather(iris, key = measure, n, Sepal.Length:Petal.Width) %>% 
-  separate(measure, c("type", "dimension"))
-longdata %>% group_by(Species, type, dimension) %>% summarise(avg_dim = mean(n, na.rm = TRUE))
+longdata <- gather(tbl_df(iris), key = measure, n,
+  Sepal.Length:Petal.Width) %>%  separate(measure, c("type",
+    "dimension"))
+longdata %>% group_by(Species, type, dimension) %>%
+  summarise(avg_dim = mean(n, na.rm = TRUE))
 ```
 
 ```
@@ -372,7 +426,8 @@ Using `group_by`
 ==============================================
 
 ```r
-pew %>% gather(income, n, -religion) %>% group_by(income) %>% summarise(totals = sum(n))
+pew %>% gather(income, n, -religion) %>%
+  group_by(income) %>% summarise(totals = sum(n))
 ```
 
 ```
@@ -396,7 +451,8 @@ Using `group_by` (2)
 ==============================================
 
 ```r
-pew %>% gather(income, n, -religion) %>% group_by(religion) %>% summarise(totals = sum(n))
+pew %>% gather(income, n, -religion) %>%
+  group_by(religion) %>% summarise(totals = sum(n))
 ```
 
 ```
