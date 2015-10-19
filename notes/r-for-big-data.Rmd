@@ -215,7 +215,7 @@ More piping
 library(nycflights13)
 flights %>% group_by(carrier) %>% 
   summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE), count = n()) %>% 
-  merge(., airlines) %>% arrange(avg_depdelay) %>% head
+  left_join(airlines) %>% arrange(avg_depdelay) %>% head
 ```
 
 Using `separate`
