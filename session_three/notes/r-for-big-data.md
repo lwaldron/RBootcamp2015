@@ -1,7 +1,7 @@
 ---
 title: "Making the most of R"
 author: "Marcel Ramos"
-date: "October 17, 2015"
+date: "October 18, 2015"
 output: 
   beamer_presentation:
     theme: "CambridgeUS"
@@ -257,11 +257,19 @@ More piping
 library(nycflights13)
 flights %>% group_by(carrier) %>% 
   summarise(avg_depdelay = mean(dep_delay, na.rm = TRUE), count = n()) %>% 
-  merge(., airlines) %>% arrange(avg_depdelay) %>% head
+  left_join(airlines) %>% arrange(avg_depdelay) %>% head
 ```
 
 ```
+## Warning in left_join_impl(x, y, by$x, by$y): joining factor and character
+## vector, coercing into character vector
+```
+
+```
+## Source: local data frame [6 x 4]
+## 
 ##   carrier avg_depdelay count                   name
+##     (chr)        (dbl) (int)                 (fctr)
 ## 1      US     3.782418 20536        US Airways Inc.
 ## 2      HA     4.900585   342 Hawaiian Airlines Inc.
 ## 3      AS     5.804775   714   Alaska Airlines Inc.
