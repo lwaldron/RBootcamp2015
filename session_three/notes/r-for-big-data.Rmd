@@ -66,7 +66,7 @@ Useful tips for learning R (stand-alone)
 ==============================================
 Pseudo code                                   |   Example code
 --------------------------------------------  |   -------------------
-install.packages(packagename)                 | library(dplyr) 
+install.packages(packagename)                 | install.packages(dplyr) 
 ?functionname                                 | ?select
 ?package::functionname                        | ?dplyr::select
 ? 'Reserved keyword or symbol' \color{blue}{(or backticks)} | ? '%>%'
