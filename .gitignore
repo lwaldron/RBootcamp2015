@@ -24,4 +24,4 @@ vignettes/*.pdf
 *.log
 
 *.tex
-.Rproj.user
+*.Rproj
